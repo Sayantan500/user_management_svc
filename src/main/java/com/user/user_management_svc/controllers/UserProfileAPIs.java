@@ -1,5 +1,6 @@
 package com.user.user_management_svc.controllers;
 
+import com.user.user_management_svc.models.UpdateAFieldInUserProfile;
 import com.user.user_management_svc.models.UserBioData;
 import com.user.user_management_svc.persistence.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,21 +24,53 @@ public class UserProfileAPIs
     }
 
     @DeleteMapping("/users/{id}")
-    public HttpStatus deleteUserByID(@PathVariable(name = "id") String userID)
+    public ResponseEntity<Object> deleteUserByID(@PathVariable(name = "id") String userID)
     {
         //Todo: check if the user profile is correctly deleted and return appropriate response
-        userRepository.deleteUserProfile(userID);
-        return HttpStatus.NO_CONTENT;
+        return
+                userRepository.deleteUserProfile(userID) ?
+                        new ResponseEntity<>(HttpStatus.OK) :
+                        new ResponseEntity<>(HttpStatus.NO_CONTENT);
+
     }
 
-    @PostMapping("/user/{id}/profile")
-    public ResponseEntity<UserBioData> updateEntireUserProfile(
+    @PostMapping("/users/{id}/profile")
+    public ResponseEntity<String> updateEntireUserProfile(
             @PathVariable(name = "id") String userID,
             @RequestBody UserBioData updatedUserProfile
     )
     {
-        //Todo: update the profile and return the updated profile with userID and appropriate http status code
-        userRepository.updateUserProfile(userID, updatedUserProfile);
-        return null;
+        //Todo: return the updated profile with userID and appropriate http status code
+        return userRepository.updateUserProfile(
+                userID,
+                updatedUserProfile
+        ) ?
+                new ResponseEntity<>("updated",HttpStatus.OK) :
+                new ResponseEntity<>("update failed",HttpStatus.NOT_MODIFIED);
+    }
+
+    @PutMapping("/users/{id}/profile/{field}")
+    public ResponseEntity<String> updateFieldValueOfUserProfile(
+            @PathVariable(name = "id") String userID,
+            @PathVariable(name = "field") String fieldNameToUpdate,
+            @RequestBody UpdateAFieldInUserProfile updateObject
+            )
+    {
+        //Todo: return the updated profile with userID and appropriate http status code
+        return userRepository.updateFieldValueInUserProfile(
+                userID,
+                fieldNameToUpdate,
+                updateObject.getNewValue()
+        ) ?
+                new ResponseEntity<>("updated",HttpStatus.OK) :
+                new ResponseEntity<>("update failed",HttpStatus.NOT_MODIFIED);
+    }
+
+    /// Development and testing only
+    @PostMapping("/users/new")
+    public ResponseEntity<String> saveNewUser(@RequestBody UserBioData newUserProfile)
+    {
+        String userID = userRepository.saveUserProfile(newUserProfile,null);
+        return new ResponseEntity<>(userID,HttpStatus.CREATED);
     }
 }
