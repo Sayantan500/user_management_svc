@@ -22,8 +22,8 @@ public class UserRepository implements UserCredentialsDao, UserProfileDao
     }
 
     @Override
-    public void saveUserProfile(UserBioData userBioData, String userID) {
-        userProfileDao.saveUserProfile(userBioData, userID);
+    public String saveUserProfile(UserBioData userBioData, String userID) {
+        return userProfileDao.saveUserProfile(userBioData, userID);
     }
 
     @Override
@@ -32,17 +32,26 @@ public class UserRepository implements UserCredentialsDao, UserProfileDao
     }
 
     @Override
-    public void updateFieldValueInUserProfile(String userID, String fieldNameToUpdate, Object newValue) {
-        userProfileDao.updateFieldValueInUserProfile(userID,fieldNameToUpdate,newValue);
+    public boolean updateFieldValueInUserProfile(String userID, String fieldNameToUpdate, Object newValue) {
+        return userProfileDao
+                .updateFieldValueInUserProfile(
+                        userID,
+                        fieldNameToUpdate,
+                        newValue
+                );
     }
 
     @Override
-    public void updateUserProfile(String userID, UserBioData newUserBiodata) {
-        userProfileDao.updateUserProfile(userID,newUserBiodata);
+    public boolean updateUserProfile(String userID, UserBioData newUserBiodata) {
+        return userProfileDao
+                .updateUserProfile(
+                        userID,
+                        newUserBiodata
+                );
     }
 
     @Override
-    public void deleteUserProfile(String userID) {
-        userProfileDao.deleteUserProfile(userID);
+    public boolean deleteUserProfile(String userID) {
+        return userProfileDao.deleteUserProfile(userID);
     }
 }
