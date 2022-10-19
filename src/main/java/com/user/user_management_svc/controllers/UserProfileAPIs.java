@@ -20,7 +20,7 @@ public class UserProfileAPIs
         UserBioData userProfileFromDB = userRepository.getUserProfile(userID);
         return userProfileFromDB!=null ?
                 new ResponseEntity<>(userProfileFromDB, HttpStatus.OK):
-                new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                new ResponseEntity<>(null,HttpStatus.NOT_FOUND);
     }
 
     @DeleteMapping("/users/{id}")
