@@ -6,9 +6,9 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserProfileDao
 {
-    void saveUserProfile(UserBioData userBioData, String userID);
+    String saveUserProfile(UserBioData userBioData, String userID);
     UserBioData getUserProfile(String userID);
-    void updateFieldValueInUserProfile(String userID, String fieldNameToUpdate, Object newValue);
-    void updateUserProfile(String userID, UserBioData newUserBiodata);
-    void deleteUserProfile(String userID);
+    boolean updateFieldValueInUserProfile(String userID, String fieldNameToUpdate, Object newValue);
+    boolean updateUserProfile(String userID, UserBioData newUserBiodata);
+    boolean deleteUserProfile(String userID);
 }
