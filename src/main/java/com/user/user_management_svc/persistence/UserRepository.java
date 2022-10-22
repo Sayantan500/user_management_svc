@@ -32,7 +32,7 @@ public class UserRepository implements UserCredentialsDao, UserProfileDao
     }
 
     @Override
-    public boolean updateFieldValueInUserProfile(String userID, String fieldNameToUpdate, Object newValue) {
+    public UserBioData updateFieldValueInUserProfile(String userID, String fieldNameToUpdate, Object newValue) {
         return userProfileDao
                 .updateFieldValueInUserProfile(
                         userID,
@@ -42,7 +42,7 @@ public class UserRepository implements UserCredentialsDao, UserProfileDao
     }
 
     @Override
-    public boolean updateUserProfile(String userID, UserBioData newUserBiodata) {
+    public UserBioData updateUserProfile(String userID, UserBioData newUserBiodata) {
         return userProfileDao
                 .updateUserProfile(
                         userID,
