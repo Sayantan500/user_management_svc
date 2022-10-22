@@ -51,7 +51,7 @@ class UserProfileDaoImpl implements UserProfileDao
     }
 
     @Override
-    public boolean updateFieldValueInUserProfile(String userID, String fieldNameToUpdate, Object newValue) {
+    public UserBioData updateFieldValueInUserProfile(String userID, String fieldNameToUpdate, Object newValue) {
         if(isUserExisting(userID))
         {
             try {
@@ -64,7 +64,7 @@ class UserProfileDaoImpl implements UserProfileDao
                 System.out.println(">> [ UserProfileDaoImpl.updateFieldValueInUserProfile ] " + exception.getMessage());
                 throw new RuntimeException(exception.getMessage());
             }
-            return true;
+            return getUserProfile(userID);
         }
         else
             System.out.println(
@@ -72,11 +72,11 @@ class UserProfileDaoImpl implements UserProfileDao
                             userID +
                             " is does not exist."
             );
-        return false;
+        return null;
     }
 
     @Override
-    public boolean updateUserProfile(String userID, UserBioData newUserBiodata) {
+    public UserBioData updateUserProfile(String userID, UserBioData newUserBiodata) {
         if(isUserExisting(userID))
         {
             try{
@@ -95,7 +95,7 @@ class UserProfileDaoImpl implements UserProfileDao
                             userID +
                             " is updated."
             );
-            return true;
+            return getUserProfile(userID);
         }
         else
             System.out.println(
@@ -104,7 +104,7 @@ class UserProfileDaoImpl implements UserProfileDao
                             " does not exists."
             );
 
-        return false;
+        return null;
     }
 
     @Override
