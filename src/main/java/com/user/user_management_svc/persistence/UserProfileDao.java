@@ -8,7 +8,7 @@ public interface UserProfileDao
 {
     String saveUserProfile(UserBioData userBioData, String userID);
     UserBioData getUserProfile(String userID);
-    boolean updateFieldValueInUserProfile(String userID, String fieldNameToUpdate, Object newValue);
-    boolean updateUserProfile(String userID, UserBioData newUserBiodata);
+    UserBioData updateFieldValueInUserProfile(String userID, String fieldNameToUpdate, Object newValue);
+    UserBioData updateUserProfile(String userID, UserBioData newUserBiodata);
     boolean deleteUserProfile(String userID);
 }
