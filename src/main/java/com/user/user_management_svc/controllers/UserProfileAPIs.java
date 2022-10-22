@@ -26,44 +26,44 @@ public class UserProfileAPIs
     @DeleteMapping("/users/{id}")
     public ResponseEntity<Object> deleteUserByID(@PathVariable(name = "id") String userID)
     {
-        //Todo: check if the user profile is correctly deleted and return appropriate response
-        return
-                userRepository.deleteUserProfile(userID) ?
-                        new ResponseEntity<>(HttpStatus.OK) :
-                        new ResponseEntity<>(HttpStatus.NO_CONTENT);
-
+        return userRepository.deleteUserProfile(userID) ?
+                new ResponseEntity<>(HttpStatus.NO_CONTENT) :
+                new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @PostMapping("/users/{id}/profile")
-    public ResponseEntity<String> updateEntireUserProfile(
+    public ResponseEntity<UserBioData> updateEntireUserProfile(
             @PathVariable(name = "id") String userID,
             @RequestBody UserBioData updatedUserProfile
     )
     {
-        //Todo: return the updated profile with userID and appropriate http status code
-        return userRepository.updateUserProfile(
-                userID,
-                updatedUserProfile
-        ) ?
-                new ResponseEntity<>("updated",HttpStatus.OK) :
-                new ResponseEntity<>("update failed",HttpStatus.NOT_MODIFIED);
+        UserBioData updateUserProfile =
+                userRepository.updateUserProfile(
+                        userID,
+                        updatedUserProfile
+                );
+        return updateUserProfile!=null ?
+                new ResponseEntity<>(updatedUserProfile,HttpStatus.OK) :
+                new ResponseEntity<>(null,HttpStatus.NOT_MODIFIED);
     }
 
     @PutMapping("/users/{id}/profile/{field}")
-    public ResponseEntity<String> updateFieldValueOfUserProfile(
+    public ResponseEntity<UserBioData> updateFieldValueOfUserProfile(
             @PathVariable(name = "id") String userID,
             @PathVariable(name = "field") String fieldNameToUpdate,
             @RequestBody UpdateAFieldInUserProfile updateObject
-            )
+    )
     {
-        //Todo: return the updated profile with userID and appropriate http status code
-        return userRepository.updateFieldValueInUserProfile(
-                userID,
-                fieldNameToUpdate,
-                updateObject.getNewValue()
-        ) ?
-                new ResponseEntity<>("updated",HttpStatus.OK) :
-                new ResponseEntity<>("update failed",HttpStatus.NOT_MODIFIED);
+        UserBioData updatedUserProfile =
+                userRepository.updateFieldValueInUserProfile(
+                        userID,
+                        fieldNameToUpdate,
+                        updateObject.getNewValue()
+                );
+
+        return updatedUserProfile!=null ?
+                new ResponseEntity<>(updatedUserProfile,HttpStatus.OK) :
+                new ResponseEntity<>(null,HttpStatus.NOT_MODIFIED);
     }
 
     /// Development and testing only
