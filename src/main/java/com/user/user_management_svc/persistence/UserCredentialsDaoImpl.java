@@ -8,6 +8,9 @@ import com.user.user_management_svc.configurations.FirebaseConfiguration;
 import com.user.user_management_svc.models.UserCredentials;
 import org.springframework.stereotype.Repository;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Repository
 class UserCredentialsDaoImpl implements UserCredentialsDao
 {
@@ -21,31 +24,53 @@ class UserCredentialsDaoImpl implements UserCredentialsDao
     @Override
     public String saveUserCredentials(UserCredentials userCredentials)
     {
-        final CreateRequest newUserCreationRequest = new CreateRequest();
+        CreateRequest newUserCreationRequest = new CreateRequest();
+        Map<String,Object> customClaims = new HashMap<>();
+
         newUserCreationRequest
                 .setEmail(userCredentials.getEmail())
                 .setPassword(userCredentials.getPassword())
                 .setEmailVerified(true);
+
         UserRecord newUserRecord = null;
         try{
             newUserRecord = firebaseAuth.createUser(newUserCreationRequest);
         }catch(FirebaseAuthException firebaseAuthException){
             System.out.println(">> [ UserCredentialsDaoImpl.saveUserCredentials() ] " + firebaseAuthException);
         }
+
         if( newUserRecord!=null)
         {
-            System.out.println(">> [ UserCredentialsDaoImpl.saveUserCredentials() ] Successfully created new user: " + newUserRecord.getUid());
+            try {
+                customClaims.put("role","student");
+                firebaseAuth.createCustomToken(newUserRecord.getUid(),customClaims);
+            } catch (FirebaseAuthException e) {
+                customClaims = null;
+                newUserCreationRequest = null;
+                throw new RuntimeException(e);
+            }
+
+            System.out.println(
+                    ">> [ UserCredentialsDaoImpl.saveUserCredentials() ] Successfully created new user: " +
+                            newUserRecord.getUid()
+            );
+
+            customClaims = null;
+            newUserCreationRequest = null;
+
             return newUserRecord.getUid();
         }
         else
             System.out.println(">> [ UserCredentialsDaoImpl.saveUserCredentials() ] New user creation failed...!");
+
+        customClaims = null;
+        newUserCreationRequest = null;
         return null;
     }
 
     @Override
     public void removeUserCredentials(String userID)
     {
-        // Todo: remove the user credentials from firebase auth database.
         firebaseAuth.deleteUserAsync(userID).addListener(
                 () -> System.out.println("User with id " + userID + " is deleted"),
                 Runnable::run
