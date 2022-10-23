@@ -4,7 +4,7 @@ import com.user.user_management_svc.models.UserBioData;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface UserProfileDao
+interface UserProfileDao
 {
     String saveUserProfile(UserBioData userBioData, String userID);
     UserBioData getUserProfile(String userID);

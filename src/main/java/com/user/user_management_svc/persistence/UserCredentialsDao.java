@@ -4,7 +4,7 @@ import com.user.user_management_svc.models.UserCredentials;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface UserCredentialsDao
+interface UserCredentialsDao
 {
     String saveUserCredentials(UserCredentials userCredentials);
     void removeUserCredentials(String userID);
