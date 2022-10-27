@@ -31,7 +31,7 @@ public class UserProfileAPIs
                 new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @PostMapping("/users/{id}/profile")
+    @PatchMapping("/users/{id}/profile")
     public ResponseEntity<UserBioData> updateEntireUserProfile(
             @PathVariable(name = "id") String userID,
             @RequestBody UserBioData updatedUserProfile
@@ -64,13 +64,5 @@ public class UserProfileAPIs
         return updatedUserProfile!=null ?
                 new ResponseEntity<>(updatedUserProfile,HttpStatus.OK) :
                 new ResponseEntity<>(null,HttpStatus.NOT_MODIFIED);
-    }
-
-    /// Development and testing only
-    @PostMapping("/users/new")
-    public ResponseEntity<String> saveNewUser(@RequestBody UserBioData newUserProfile)
-    {
-        String userID = userRepository.saveUserProfile(newUserProfile,null);
-        return new ResponseEntity<>(userID,HttpStatus.CREATED);
     }
 }
