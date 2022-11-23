@@ -43,28 +43,23 @@ class UserCredentialsDaoImpl implements UserCredentialsDao
         {
             try {
                 customClaims.put("role","student");
-                firebaseAuth.createCustomToken(newUserRecord.getUid(),customClaims);
+                firebaseAuth.setCustomUserClaims(newUserRecord.getUid(),customClaims);
             } catch (FirebaseAuthException e) {
-                customClaims = null;
-                newUserCreationRequest = null;
-                throw new RuntimeException(e);
+                System.out.println(">> [ UserCredentialsDaoImpl.saveUserCredentials() ] " +
+                        e.getAuthErrorCode() + "\n" +
+                        e.getMessage()
+                );
             }
 
             System.out.println(
                     ">> [ UserCredentialsDaoImpl.saveUserCredentials() ] Successfully created new user: " +
                             newUserRecord.getUid()
             );
-
-            customClaims = null;
-            newUserCreationRequest = null;
-
             return newUserRecord.getUid();
         }
         else
             System.out.println(">> [ UserCredentialsDaoImpl.saveUserCredentials() ] New user creation failed...!");
 
-        customClaims = null;
-        newUserCreationRequest = null;
         return null;
     }
 
